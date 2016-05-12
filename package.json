@@ -1,0 +1,24 @@
+{
+  "name": "map-cache-ttl",
+  "version": "0.1.0",
+  "description": "Map cache with expiration and es6 `Map`s",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "co": "^4.6.0",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test.js"
+  },
+  "keywords": [
+    "map",
+    "cache",
+    "es6",
+    "expire",
+    "ttl",
+    "proxy"
+  ],
+  "author": "Sigalas Alexandros <alxarch@gmail.com>",
+  "license": "ISC"
+}
