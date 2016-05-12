@@ -19,6 +19,7 @@
     "cache",
     "es6",
     "expire",
+    "max_age",
     "ttl",
     "proxy"
   ],
