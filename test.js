@@ -105,30 +105,30 @@ describe('Cache', () => {
 	describe('new Cache()', () => {
 		it('Works with no arguments', () => {
 			const c = new Cache();
-			assert.strictEqual(c.ttl, Infinity);
+			assert.strictEqual(c.max_age, Infinity);
 			assert.strictEqual(c.interval, null);
 		});
 		it('Is instance of Map', () => {
 			const c = new Cache();
 			assert.ok(c instanceof Map, 'Instance of Map');
 		});
-		it('Sets ttl', () => {
+		it('Sets max_age', () => {
 			let c = new Cache(4);
-			assert.strictEqual(c.ttl, 4);
+			assert.strictEqual(c.max_age, 4);
 			c = new Cache('7');
-			assert.strictEqual(c.ttl, 7);
+			assert.strictEqual(c.max_age, 7);
 		});
 		it('Ignores invalid ttl', () => {
 			let c = new Cache(-4);
-			assert.equal(c.ttl, Infinity);
+			assert.equal(c.max_age, Infinity);
 			c = new Cache(null);
-			assert.equal(c.ttl, Infinity);
+			assert.equal(c.max_age, Infinity);
 			c = new Cache(undefined);
-			assert.equal(c.ttl, Infinity);
+			assert.equal(c.max_age, Infinity);
 			c = new Cache('foo');
-			assert.equal(c.ttl, Infinity);
+			assert.equal(c.max_age, Infinity);
 			c = new Cache({});
-			assert.equal(c.ttl, Infinity);
+			assert.equal(c.max_age, Infinity);
 		});
 
 	});
@@ -182,6 +182,32 @@ describe('Cache', () => {
 				.then( result => assert.equal(cache.size, 1) )
 				;
 
+		});
+	});
+
+	describe('Cache#ms()', () => {
+		it ('Handles numbers', () => {
+			const cache = new Cache();
+			assert.strictEqual(cache.ms(1000), 1000);
+			assert.strictEqual(cache.ms(-1), Infinity);
+			assert.strictEqual(cache.ms(NaN), Infinity);
+			assert.strictEqual(cache.ms(0), Infinity);
+			assert.strictEqual(cache.ms(0.1), Infinity);
+			assert.strictEqual(cache.ms(-Infinity), Infinity);
+		});
+		it ('Handles strings', () => {
+			const cache = new Cache();
+			assert.strictEqual(cache.ms('1s'), 1000);
+			assert.strictEqual(cache.ms('-1s'), Infinity);
+		});
+		it ('Handles other types', () => {
+			const cache = new Cache();
+			assert.strictEqual(cache.ms(null), Infinity);
+			assert.strictEqual(cache.ms(undefined), Infinity);
+			assert.strictEqual(cache.ms(() => {}), Infinity);
+			assert.strictEqual(cache.ms(/a/), Infinity);
+			assert.strictEqual(cache.ms({}), Infinity);
+			assert.strictEqual(cache.ms([1,2,3]), Infinity);
 		});
 	});
 

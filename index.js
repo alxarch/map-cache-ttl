@@ -1,16 +1,32 @@
 'use strict';
+
 const hashobj = require('object-hash');
-const DEFAULT_TTL = Infinity;
+const ms = require('ms');
 
 class Cache extends Map {
-
-	constructor (ttl, interval) {
+	constructor (max_age, interval) {
 		super();
-		this.ttl = ttl > 0 ? parseInt(ttl) : DEFAULT_TTL;
+		this.max_age = this.ms(max_age) || Infinity;
 		this.expires = new Map();
-		this.interval = interval > 0 ?
+		interval = this.ms(interval);
+		this.interval = interval > 0 && interval < Infinity ?
 			setInterval(this.trim.bind(this), interval) :
 			null;
+	}
+
+	ms (ttl) {
+		switch (typeof ttl) {
+			case 'string':
+				ttl = ms(ttl);
+
+				break;
+			case 'number':
+				ttl = Math.floor(ttl);
+				break;
+			default:
+				break;
+		}
+		return ttl > 0 ? ttl : this.max_age;
 	}
 
 	now () {
@@ -49,10 +65,9 @@ class Cache extends Map {
 		return this.check(key) ? super.get(key) : void 0;
 	}
 
-	set (key, value, ttl) {
+	set (key, value, max_age) {
 		super.set(key, value);
-		ttl = ttl > 0 ? ttl : this.ttl;
-		this.expires.set(key, this.now() + ttl);
+		this.expires.set(key, this.now() + this.ms(max_age));
 		return this;
 	}
 
@@ -66,7 +81,7 @@ class Cache extends Map {
 		return super.size;
 	}
 
-	proxy (fn, ttl) {
+	proxy (fn, max_age) {
 		const cache = this;
 		const fnkey = hashobj(fn);
 		return function () {
@@ -84,7 +99,7 @@ class Cache extends Map {
 						reject(err);
 					}
 				}).then( results => {
-					return cache.set(key, results, ttl).get(key);
+					return cache.set(key, results, max_age).get(key);
 				});
 			}
 		}
