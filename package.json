@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Map cache with expiration and es6 `Map`s",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "object-hash": "^1.1.2"
+  },
   "devDependencies": {
     "co": "^4.6.0",
     "mocha": "^2.4.5"

@@ -1,4 +1,5 @@
 'use strict';
+const hashobj = require('object-hash');
 const DEFAULT_TTL = Infinity;
 
 class Cache extends Map {
@@ -63,6 +64,30 @@ class Cache extends Map {
 	get size () {
 		this.trim();
 		return super.size;
+	}
+
+	proxy (fn, ttl) {
+		const cache = this;
+		const fnkey = hashobj(fn);
+		return function () {
+			const args = Array.prototype.slice.apply(arguments);
+			let key = `${fnkey}:${hashobj(args)}`;
+			if (cache.has(key)) {
+				return Promise.resolve(cache.get(key));
+			}
+			else {
+				return new Promise((resolve, reject) => {
+					try {
+						resolve(fn.apply(null, args));
+					}
+					catch (err) {
+						reject(err);
+					}
+				}).then( results => {
+					return cache.set(key, results, ttl).get(key);
+				});
+			}
+		}
 	}
 
 }

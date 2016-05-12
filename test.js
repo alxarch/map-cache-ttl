@@ -158,4 +158,31 @@ describe('Cache', () => {
 		});
 	});
 
+	describe('Cache#proxy()', () => {
+		it('Returns a proxy function', () => {
+			const cache = new Cache();
+			let n = 0;
+			const fn = (a, b) => n++ + a + b;
+			const proxy = cache.proxy(fn);
+			assert.equal('function', typeof proxy);
+			return proxy(1, 2)
+				.then( result => assert.equal(result, 3))
+				.then( result => assert.equal(n, 1))
+				.then( result => proxy(1, 2))
+				.then( result => assert.equal(result, 3))
+				.then( result => assert.equal(n, 1))
+				.then( result => proxy(2, 2))
+				.then( result => assert.equal(result, 5))
+				.then( result => assert.equal(n, 2))
+				.then( result => assert.equal(cache.size, 2) )
+				.then( result => cache.clear())
+				.then( result => proxy(1, 2))
+				.then( result => assert.equal(result, 5))
+				.then( result => assert.equal(n, 3))
+				.then( result => assert.equal(cache.size, 1) )
+				;
+
+		});
+	});
+
 });
