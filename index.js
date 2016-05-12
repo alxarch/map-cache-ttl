@@ -55,6 +55,11 @@ class Cache extends Map {
 		return this;
 	}
 
+	clear () {
+		this.expires.clear();
+		return super.clear();
+	}
+
 }
 
 const mapiter = Map.prototype[Symbol.iterator];
