@@ -20,6 +20,22 @@ describe('Cache', () => {
 			}, 20);
 		});
 	});
+	describe('Cache#entries()', () => {
+		it('Returns non expired keys', done => {
+			const c = new Cache(10);
+			const bar = {};
+			const baz = {};
+			c.set('foo', bar);
+			c.set('bar', baz, 30);
+			setTimeout(() => {
+				for (let pair of c.entries()) {
+					assert.notEqual(pair[0], 'foo', 'Skips expired keys');
+				}
+				done();
+
+			}, 20);
+		});
+	});
 	describe('Cache#keys()', () => {
 		it('Returns non expired keys', done => {
 			const c = new Cache(10);
