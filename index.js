@@ -60,6 +60,11 @@ class Cache extends Map {
 		return super.clear();
 	}
 
+	get size () {
+		this.trim();
+		return super.size;
+	}
+
 }
 
 const mapiter = Map.prototype[Symbol.iterator];
@@ -89,5 +94,6 @@ Cache.prototype[Symbol.iterator] = function *cacheIterator() {
 		}
 	}
 };
+
 
 module.exports = Cache;
