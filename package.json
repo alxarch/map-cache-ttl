@@ -1,6 +1,6 @@
 {
   "name": "map-cache-ttl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Map cache with expiration and es6 `Map`s",
   "main": "index.js",
   "dependencies": {
