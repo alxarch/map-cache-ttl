@@ -39,7 +39,7 @@ class Cache extends Map {
 
 	delete (key) {
 		this.expires.delete(key);
-		return this.delete(key);
+		return super.delete(key);
 	}
 
 	trim () {

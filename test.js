@@ -4,6 +4,18 @@ const assert = require('assert');
 const Cache = require('.');
 const get = (map, key) => Map.prototype.get.call(map, key);
 describe('Cache', () => {
+	describe('Cache#delete(key)', () => {
+		it('Deletes a key', done => {
+			const c = new Cache(10);
+			const bar = {};
+			const baz = {};
+			c.set('foo', bar);
+			c.set('bar', baz, 30);
+			c.delete('foo');
+			assert.equal(c.get('foo', null, 'deletes key'));
+			done();
+		});
+	});
 	describe('Cache#clear()', () => {
 		it('Clears keys and expires', done => {
 			const c = new Cache(10);
