@@ -4,12 +4,12 @@
   "description": "Map cache with expiration and es6 `Map`s",
   "main": "index.js",
   "dependencies": {
-    "ms": "^0.7.1",
-    "object-hash": "^1.1.2"
+    "ms": "^2.1.3",
+    "object-hash": "^3.0.0"
   },
   "devDependencies": {
     "co": "^4.6.0",
-    "mocha": "^2.4.5"
+    "mocha": "^10.2.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha test.js"
